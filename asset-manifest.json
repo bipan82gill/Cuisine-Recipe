@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/bipan82gill/Cuisine-Recipe.git/static/css/main.5f361e03.chunk.css",
+    "main.js": "/bipan82gill/Cuisine-Recipe.git/static/js/main.104ebcd1.chunk.js",
+    "main.js.map": "/bipan82gill/Cuisine-Recipe.git/static/js/main.104ebcd1.chunk.js.map",
+    "runtime-main.js": "/bipan82gill/Cuisine-Recipe.git/static/js/runtime-main.c5869694.js",
+    "runtime-main.js.map": "/bipan82gill/Cuisine-Recipe.git/static/js/runtime-main.c5869694.js.map",
+    "static/js/2.4a0ae626.chunk.js": "/bipan82gill/Cuisine-Recipe.git/static/js/2.4a0ae626.chunk.js",
+    "static/js/2.4a0ae626.chunk.js.map": "/bipan82gill/Cuisine-Recipe.git/static/js/2.4a0ae626.chunk.js.map",
+    "index.html": "/bipan82gill/Cuisine-Recipe.git/index.html",
+    "precache-manifest.6a3ba01fab17772d3511ee6faaafae9f.js": "/bipan82gill/Cuisine-Recipe.git/precache-manifest.6a3ba01fab17772d3511ee6faaafae9f.js",
+    "service-worker.js": "/bipan82gill/Cuisine-Recipe.git/service-worker.js",
+    "static/css/main.5f361e03.chunk.css.map": "/bipan82gill/Cuisine-Recipe.git/static/css/main.5f361e03.chunk.css.map",
+    "static/js/2.4a0ae626.chunk.js.LICENSE.txt": "/bipan82gill/Cuisine-Recipe.git/static/js/2.4a0ae626.chunk.js.LICENSE.txt",
+    "static/media/logo.svg": "/bipan82gill/Cuisine-Recipe.git/static/media/logo.5d5d9eef.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.c5869694.js",
+    "static/js/2.4a0ae626.chunk.js",
+    "static/css/main.5f361e03.chunk.css",
+    "static/js/main.104ebcd1.chunk.js"
+  ]
+}
