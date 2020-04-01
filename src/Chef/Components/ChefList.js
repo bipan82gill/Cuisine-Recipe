@@ -1,16 +1,20 @@
 import React from 'react';
-import './ChefList.css';
+
 import ChefItem from './ChefItem';
+import Card from '../../Shared/Components/UIElement/Card';
+import './ChefList.css';
 
 const ChefList = props =>{
     if(props.items.length === 0){
         return(
         <div className ="center">
-            <h1>No Chef is Found</h1>
+            <Card>
+                <h1>No Chef is Found</h1>
+            </Card>
         </div>
        )   
     }
-    return <ul>
+    return <ul className ="chef-list">
         {props.items.map(chef => (
          <ChefItem 
          key={chef.id} 

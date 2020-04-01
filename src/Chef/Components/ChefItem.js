@@ -1,17 +1,26 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
+
+import Avatar from '../../Shared/Components/UIElement/Avatar';
+import Card from '../../Shared/Components/UIElement/Card';
 import './ChefItem.css';
+
 const ChefItem = props =>{
     return( 
+        
     <li className="chef-item">
-        <div className ="chef-item__content">
-            <div className ="chef-item__image">
-                <img src={props.image} alt={props.name} />
-            </div>
-            <div className ="chef-item__info">
-                <h2>{props.name}</h2>
-                <h3>{props.cuisineCount} {props.cuisineCount === 1 ? 'cuisine' :'cuisines'}</h3>
-            </div>
-        </div>
+      
+            <Card className ="chef-item__content">
+                <Link to={`/${props.id}/cuisines`}>
+                <div className ="chef-item__image">
+                    <Avatar image={props.image} alt={props.alt}/>
+                </div>
+                <div className ="chef-item__info">
+                    <h2>{props.name}</h2>
+                    <h3>{props.cuisineCount} {props.cuisineCount === 1 ? 'cuisine' :'cuisines'}</h3>
+                </div>
+                </Link>
+            </Card>
     </li>
     )
  }
