@@ -3,11 +3,14 @@ import { BrowserRouter as Router, Route, Redirect, Switch} from 'react-router-do
 
 import Chef from './Chef/Pages/Chef';
 import NewCuisine from './Cuisines/Pages/NewCuisine';
+import MainNavigation from './Shared/Components/Navigation/MainNavigation';
 import './App.css';
 
 const  App = () => {
   return(
     <Router>
+    <MainNavigation />
+    <main>
     <Switch>
     <Route path="/" exact>
     <Chef />
@@ -17,6 +20,7 @@ const  App = () => {
     </Route>
     <Redirect to="/" />
     </Switch>
+    </main>
     </Router>
   ) 
 }
