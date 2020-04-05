@@ -19,7 +19,7 @@ const  App = () => {
     <Route path="/:chefId/cuisines" exact>
     <ChefCuisines />
     </Route>
-    <Route path ="/cuisine/new" exact>
+    <Route path ="/add/recipe" exact>
     <NewCuisine />
     </Route>
     <Redirect to="/" />
