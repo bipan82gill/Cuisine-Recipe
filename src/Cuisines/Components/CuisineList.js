@@ -3,6 +3,7 @@ import React from 'react';
 import Card from '../../Shared/Components/UIElement/Card';
 import './CuisineItem';
 import CuisineItem from './CuisineItem';
+import Button from '../../Shared/Components/UIElement/FormComponents/Button';
 import './CuisineList.css';
 
 const CuisineList = props => {
@@ -11,9 +12,9 @@ const CuisineList = props => {
             <div className ="cuisine-list-center">
                 <Card>
                 <h2> No Cuisines Found</h2>
-                <button> 
+                <Button to='/add/recipe'> 
                     ADD CUISINE
-                </button>
+                </Button>
                 </Card>
             </div>
             )

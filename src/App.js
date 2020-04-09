@@ -5,6 +5,7 @@ import Chef from './Chef/Pages/Chef';
 import NewCuisine from './Cuisines/Pages/NewCuisine';
 import MainNavigation from './Shared/Components/Navigation/MainNavigation';
 import ChefCuisines from './Cuisines/Pages/ChefCuisines';
+import UpdateCuisine from './Cuisines/Pages/UpdateCuisine'; 
 import './App.css';
 
 const  App = () => {
@@ -21,6 +22,9 @@ const  App = () => {
     </Route>
     <Route path ="/add/recipe" exact>
     <NewCuisine />
+    </Route>
+    <Route path ="/cuisines/:cuisineId">
+    <UpdateCuisine />
     </Route>
     <Redirect to="/" />
     </Switch>

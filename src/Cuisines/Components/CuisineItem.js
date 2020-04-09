@@ -7,10 +7,23 @@ import './CuisineItem.css';
 
 const CuisineItem = props =>{
     const [showRecipe, setShowRecipe]= useState(false);
+    const [showConfirmModal, setShowConfirmModal] = useState(false);
 
    const openRecipeHandler = () => setShowRecipe(true);
 
    const closeRecipeHandler = () => setShowRecipe(false);
+
+   const showDeleteWarningHandler = () =>{
+        setShowConfirmModal(true);
+   };
+   const cancelDeleteHandler = () => {
+       setShowConfirmModal(false);
+   }
+
+   const confirmDeleteHandler = () => { 
+    setShowConfirmModal(false);   
+    console.log('DELETING...');
+    }
 
     return (
         <React.Fragment>
@@ -25,6 +38,19 @@ const CuisineItem = props =>{
                     <h2>The Recipe !</h2>
                 </div>
         </Modal>
+        <Modal 
+        show ={showConfirmModal}
+        onCancel ={cancelDeleteHandler}
+        header ="Are you sure?" 
+        footerClass="cuisine-item__modal-actions" 
+        footer={
+            <React.Fragment>
+            <Button inverse onClick={cancelDeleteHandler}>Cancel</Button>
+            <Button danger onClick={confirmDeleteHandler}>Delete</Button>
+            </React.Fragment>
+        }>
+            <p>Do you want to Delete this cuisine? You can not restore it.</p>
+        </Modal>
         <li className="cuisine-item">
             <Card className="cuisine-item__content">
                 <div className ="cuisine-item__image">
@@ -37,7 +63,7 @@ const CuisineItem = props =>{
                 <div className="cuisine-item__actions">
                     <Button inverse onClick={openRecipeHandler}>WATCH VIDEO</Button>
                     <Button to={`/cuisines/${props.id}`}>EDIT</Button>
-                    <Button danger>DELETE</Button>
+                    <Button danger onClick = {showDeleteWarningHandler}>DELETE</Button>
                 </div>
                 
             </Card>

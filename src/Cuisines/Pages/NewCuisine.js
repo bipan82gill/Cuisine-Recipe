@@ -1,58 +1,37 @@
-import React, { useCallback, useReducer } from 'react';
+import React from 'react';
 
 import Input from "../../Shared/Components/UIElement/FormComponents/Input";
 import Button from '../../Shared/Components/UIElement/FormComponents/Button';
 import { VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH } from '../../Shared/Util/validators';
+import { useForm} from '../../Shared/Hooks/form-hook';
 import './NewCuisine.css';
 
-const formReducer =(state, action)=>{
-    switch(action.type){
-        case 'INPUT_CHANGE':
-            let formIsValid = true;
-            for(const inputId in state.inputs){
-                if(inputId === action.inputId){
-                    formIsValid = formIsValid && action.isValid;
-                }else{
-                    formIsValid = formIsValid && state.inputs[inputId].isValid;
-            }
-        }
-        return{
-            ...state,
-            inputs:{
-                [action.inputId]: { value: action.value, isValid:action.isValid }
-            },
-            isValid: formIsValid
-        }
-
-        default:
-        return state;
-    }
-}
 
 const NewCuisine = () => {
-  const [ formState,dispatch ] =  useReducer(formReducer, {
-        inputs:{
+    const [formState,inputHandler] = useForm(
+        {
             title:{
-                value:"",
-                isValid: false
+                value:'',
+                isValid:false
             },
-            recipe:{ 
-                value:"",
-                isValid: false
+            recipe:{
+                value:'',
+                isValid:false
+            },
+            url_video:{
+                value:'',
+                isValid:false
             }
-        },
-        isValid: false
-    });
-    const inputHandler = useCallback((id, value, isValid) => {
-        dispatch({
-                type:'INPUT_CHANGE', 
-                value: value, isValid: 
-                isValid, inputId: id 
-            })
-    }, []);
+        },false
+    )
+
+    const recipeSubmitHandler = event =>{ 
+        event.preventDefault();
+        console.log(formState.inputs);
+    }
    
     return(
-        <form className ="cuisine-form">
+        <form className ="cuisine-form" onSubmit ={recipeSubmitHandler}>
             <Input
                 id ="title" 
                 element ="input"
@@ -71,9 +50,18 @@ const NewCuisine = () => {
                 errorText="Please enter a valid recipe(atleast 5 characters)"
                 onInput={inputHandler}
             />  
+
+            <Input 
+                id ="url_video"
+                element = "input" 
+                label ="Video URL" 
+                validators={[VALIDATOR_REQUIRE()]} 
+                errorText="Please enter a valid url of video"
+                onInput={inputHandler}
+            />
             <Button type="submit" disabled ={!formState.isValid}> ADD RECIPE</Button>       
         </form>
-    )   
+    );  
 }
 
 export default NewCuisine;
