@@ -10,6 +10,8 @@ router.get('/:cid', cuisineControllers.getCuisineById);
 // route to get cuisine of specific chef 
 router.get('/chef/:chefid', cuisineControllers.getCuisineByChefId);
 
+// route to create new cuisine
+router.post('/', cuisineControllers.createCuisine);
 
 module.exports = router;
 

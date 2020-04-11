@@ -1,4 +1,7 @@
+const uuid = require('uuid/v4');
+
 const HttpError = require('../models/http-error');
+
 
 // dummy data to retrieve data for checking routes
     const Cuisines = [
@@ -38,3 +41,22 @@ const getCuisineByChefId = (req, res, next) => {
     
     res.json({ cuisine });
     }
+
+    // create Cuisine route 
+    const createCuisine = (req, res, next) => {
+      const { title, recipe, creator } = req.body;
+      
+        const newCuisine = {
+            id: uuid(),
+            title,
+            recipe, 
+            creator 
+        }
+        Cuisines.push(newCuisine);
+
+        res.status(200).json(newCuisine);
+    }
+
+    exports.getCuisineById = getCuisineById;
+    exports.getCuisineByChefId = getCuisineByChefId;
+    exports.createCuisine = createCuisine;
