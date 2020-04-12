@@ -1,5 +1,8 @@
 const uuid = require('uuid/v4');
+const { validationResult } = require('express-validator');
+
 const HttpError = require('../models/http-error');
+
 const Chef_Data =[
     {
         id: "c1",
@@ -16,7 +19,19 @@ const getChefs = (req, res, next) => {
 
 // function to signup new chef 
 const signup = (req, res, next) => {
+    const errors=  validationResult(req);
+
+        if(!errors.isEmpty()){
+            console.log(errors);
+            throw new HttpError('Invalid input passed, please check your data', 422);
+        }
+
     const { name, email, password } = req.body;
+
+    const hasUser = Chef_Data.find(u => u.email === email);
+    if(hasUser){
+        throw new HttpError('Could not signup, email is already exist', 422);
+    }
     const newChef = {
         id: uuid(),
         name,

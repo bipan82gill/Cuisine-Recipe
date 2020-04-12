@@ -1,6 +1,7 @@
 const express = require('express');
 
 const router = express.Router();
+const { check } = require('express-validator');
 
 const cuisineControllers = require('../controllers/cuisines-controllers');
 
@@ -10,11 +11,28 @@ router.get('/:cid', cuisineControllers.getCuisineById);
 // route to get cuisine of specific chef 
 router.get('/chef/:chefid', cuisineControllers.getCuisinesByChefId);
 
-// route to create new cuisine
-router.post('/', cuisineControllers.createCuisine);
+// route to create new cuisine and check validation for title
+router.post('/',
+    [
+        check('title')
+        .not().
+        isEmpty(), 
+        check('recipe').isLength({min:5}),
+        check('creator')
+        .not()
+        .isEmpty()
+    ],
+    cuisineControllers.createCuisine);
 
 //route to update cuisine
-router.patch('/:cid', cuisineControllers.updateCuisine);
+router.patch('/:cid',
+[
+    check('title')
+    .not()
+    .isEmpty(),
+    check('recipe').isLength({min:5})
+],
+ cuisineControllers.updateCuisine);
 
 //route to delete cuisine
 router.delete('/:cid', cuisineControllers.deleteCuisine);

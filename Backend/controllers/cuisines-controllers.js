@@ -1,4 +1,5 @@
 const uuid = require('uuid/v4');
+const { validationResult } = require('express-validator');
 
 const HttpError = require('../models/http-error');
 
@@ -44,9 +45,16 @@ const getCuisinesByChefId = (req, res, next) => {
     res.json({ cuisines });
     }
 
-    // create Cuisine route 
+    // create Cuisine route and apply validation 
 
     const createCuisine = (req, res, next) => {
+        const errors=  validationResult(req);
+
+        if(!errors.isEmpty()){
+            console.log(errors);
+            throw new HttpError('Invalid input passed, please check your data', 422);
+        }
+
       const { title, recipe, creator } = req.body;
       
         const newCuisine = {
@@ -62,6 +70,13 @@ const getCuisinesByChefId = (req, res, next) => {
 
     // Function to create route for updating cuisine
     const updateCuisine = (req, res, next) =>{
+        const errors=  validationResult(req);
+
+        if(!errors.isEmpty()){
+            console.log(errors);
+            throw new HttpError('Invalid input passed, please check your data', 422);
+        }
+
         const { title, recipe } = req.body;
         const cuisineId = req.params.cid;
 
@@ -79,7 +94,8 @@ const getCuisinesByChefId = (req, res, next) => {
     // Function to create route for deleting cuisine
     const deleteCuisine = (req, res, next) => {
         const cuisineId = req.params.cid;
-
+        if(!Cuisines.find(c => c.id === cuisineId))
+            throw new HttpError('Could not find a id for delete a cuisine', 404);
         Cuisines = Cuisines.filter(cuisine => cuisine.id !== cuisineId);
         res.status(200).json({ message: "Deleting Cuisine ...."});
     }
