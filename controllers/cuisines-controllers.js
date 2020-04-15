@@ -16,18 +16,22 @@ const Cuisine = require('../models/cuisine');
     ];
 
 // Function to get Cuisine by Cuisine id 
-const getCuisineById = (req, res, next) => {
+const getCuisineById = async(req, res, next) => {
         const cuisineId = req.params.cid;
-    
-        const cuisine = Cuisines.find(cuisine => {
-            return cuisine.id === cuisineId;
-        });
-    
-        if(!cuisine) {
-            throw  new HttpError('Could not find a cuisine for a provided cuisine id.', 404);   
+        let cuisine
+        try {
+            cuisine = await Cuisine.findById(cuisineId);
         }
-    
-        res.json({ cuisine });
+        catch (err) {
+            const error = new HttpError('Something went wrong, could not find a cuisine', 500); 
+            return next(error);  
+        }
+
+        if(!cuisine) {
+            const error = new HttpError('Could not find a cuisine for a provided cuisine id.', 404);
+            return next(error);
+        }
+        res.json({ cuisine: cuisine.toObject( { getters:true}) });
     }
 
 // Function to get cuisine by Chef id
@@ -55,13 +59,14 @@ const getCuisinesByChefId = (req, res, next) => {
             );
         }
         const {title, recipe, creator }= req.body;
-    const createCuisine = new Cuisine({
-        title,
-        recipe,
-        image: "https://www.indianhealthyrecipes.com/wp-content/uploads/2012/11/gulab-jamun-recipe-480x270.jpg",
-        url_video: "https://www.youtube.com/watch?v=ofedNWj43bY",
-        creator
-    });
+
+        const createCuisine = new Cuisine({
+            title,
+            recipe,
+            image: "https://www.indianhealthyrecipes.com/wp-content/uploads/2012/11/gulab-jamun-recipe-480x270.jpg",
+            url_video: "https://www.youtube.com/watch?v=ofedNWj43bY",
+            creator
+        });
         try{
             await createCuisine.save();    
         } catch (err) {
