@@ -113,11 +113,22 @@ const getCuisinesByChefId = async (req, res, next) => {
     }
 
     // Function to create route for deleting cuisine
-    const deleteCuisine = (req, res, next) => {
+    const deleteCuisine = async(req, res, next) => {
         const cuisineId = req.params.cid;
-        if(!Cuisines.find(c => c.id === cuisineId))
-            throw new HttpError('Could not find a id for delete a cuisine', 404);
-        Cuisines = Cuisines.filter(cuisine => cuisine.id !== cuisineId);
+
+        let cuisine;
+        try{
+            cuisine = await Cuisine.findById(cuisineId);
+        }catch(err){
+            const error = new HttpError('Could not find cuisine to delete', 500);
+            return next(error);
+        }
+        try{
+            await cuisine.remove();
+        }catch(err){
+            const error = new HttpError('Could not find cuisine to delete', 500);
+            return next(error);
+        }
         res.status(200).json({ message: "Deleting Cuisine ...."});
     }
 
