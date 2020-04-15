@@ -59,11 +59,20 @@ const signup = async(req, res, next) => {
 }
 
 // Function to login 
-const login = (req, res, next) => {
+const login = async(req, res, next) => {
     const { email, password } = req.body;
-    const identifiedChef = Chef_Data.find(c => c.email === email);
-    if(!identifiedChef || identifiedChef.password !== password){
-        throw new HttpError('Could not identify chef, credentials seem to be wrong', 401);
+
+    let existingChef
+    try{
+        existingChef = await Chef.findOne({ email :email });
+    } catch (err){
+        const error = new HttpError('Logged in Failed , please try again',500);
+        return next(error);
+    }
+    
+    if(!existingChef || existingChef.password !== password){
+        const error =new HttpError('Could not identify chef, credentials seem to be wrong', 401);
+        return next(error);
     }
     res.json({message: "Logged in !!!"})
 
