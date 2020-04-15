@@ -28,7 +28,8 @@ app.use((error, req, res, next) => {
     res.json({ message: error.message || 'An Unknown error occured'});
 });
 mongoose
-.connect('mongodb+srv://bipan_gill:jap30milan16@cluster0-b9tsk.mongodb.net/cuisines?retryWrites=true&w=majority')
+// .connect('mongodb+srv://bipanjeet:jap30milan16@cluster0-b9tsk.mongodb.net/cuisines?retryWrites=true&w=majority')
+.connect('mongodb+srv://bipanjeet:jap30milan16@cluster0-envva.mongodb.net/cuisines?retryWrites=true&w=majority')
 .then(()=>{
     app.listen(3000, function() {
         console.log(`server is running http://localhost:3000`);

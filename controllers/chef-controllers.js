@@ -2,6 +2,7 @@ const uuid = require('uuid/v4');
 const { validationResult } = require('express-validator');
 
 const HttpError = require('../models/http-error');
+const Chef = require('../models/chef');
 
 const Chef_Data =[
     {
@@ -18,28 +19,43 @@ const getChefs = (req, res, next) => {
 }
 
 // function to signup new chef 
-const signup = (req, res, next) => {
+const signup = async(req, res, next) => {
     const errors=  validationResult(req);
 
         if(!errors.isEmpty()){
-            console.log(errors);
-            throw new HttpError('Invalid input passed, please check your data', 422);
+    
+            return next(
+                new HttpError('Invalid input passed, please check your data', 422)) 
         }
 
-    const { name, email, password } = req.body;
+    const { name, email, password , cuisines } = req.body;
+    // Check for Chef is exist already 
+    let existingChef
+    try{
+        existingChef = await Chef.findOne({ email :email });
+    } catch (err){
+        const error = new HttpError('Failed signup, please try again later',500);
+        return next(error);
+    }
+    if(existingChef){
+        const error = new HttpError('Chef exists already, Please login instead',422);
+        return next(error);
+    }
 
-    const hasUser = Chef_Data.find(u => u.email === email);
-    if(hasUser){
-        throw new HttpError('Could not signup, email is already exist', 422);
+    const newChef = new Chef({
+       name,
+       email,
+       image: "https://www.indianhealthyrecipes.com/wp-content/uploads/2012/11/gulab-jamun-recipe-480x270.jpg",
+       password,
+       cuisines
+    });
+    try{
+        await newChef.save();
+    } catch (err){
+        const error = new HttpError('Could not signup a chef, please try again', 500);
+        return next(error);
     }
-    const newChef = {
-        id: uuid(),
-        name,
-        email,
-        password
-    }
-    Chef_Data.push(newChef);
-    res.status(200).json({Chef: newChef});  
+    res.status(201).json({ chef: newChef.toObject({ getters:true }) });  
 }
 
 // Function to login 
