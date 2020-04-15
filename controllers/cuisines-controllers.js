@@ -36,18 +36,23 @@ const getCuisineById = async(req, res, next) => {
 
 // Function to get cuisine by Chef id
 
-const getCuisinesByChefId = (req, res, next) => {
+const getCuisinesByChefId = async (req, res, next) => {
     const chefId = req.params.chefid;
-
-    const cuisines = Cuisines.filter(cuisine => {
-        return cuisine.creator === chefId;
-    });
+    
+    let cuisines
+    try{
+      cuisines = await Cuisine.find({ creator: chefId})
+    }
+    catch (err){
+        const error = new HttpError('Fetching Cuisines failed, Please try again later',500);
+        return next(error);
+    }
 
     if(!cuisines || cuisines.length === 0){
         return next(new HttpError('Could not find a cuisines for a provided  chef id.', 404));       
         }
     
-    res.json({ cuisines });
+    res.json({ cuisines: cuisines.map(cuisine => cuisine.toObject({ getters:true })  ) });
     }
 
     // create Cuisine route and apply validation 
@@ -77,7 +82,7 @@ const getCuisinesByChefId = (req, res, next) => {
         res.status(201).json({ cuisine: createCuisine});
 };
     // Function to create route for updating cuisine
-    const updateCuisine = (req, res, next) =>{
+    const updateCuisine = async (req, res, next) =>{
         const errors=  validationResult(req);
 
         if(!errors.isEmpty()){
@@ -87,16 +92,24 @@ const getCuisinesByChefId = (req, res, next) => {
 
         const { title, recipe } = req.body;
         const cuisineId = req.params.cid;
+        let cuisine;
+        try{
+            cuisine = await Cuisine.findById(cuisineId);
+        }catch (err){
+            const error = new HttpError('Could not update cuisine, something went wrong', 500);
+            return next(error);
+        }
 
-        const updatedCuisine = { ...Cuisines.find( cuisine => cuisine.id === cuisineId)}
-        const cuisineIndex = Cuisines.findIndex( cuisine => cuisine.id === cuisineId);
+        cuisine.title = title;
+        cuisine.recipe =recipe;
+        try {
+          await cuisine.save();
+        } catch (err) {
+            const error = new HttpError('Something went wrong, could not update cuisine',500);
+            return next(error);
+        }
 
-        updatedCuisine.title = title;
-        updatedCuisine.recipe =recipe;
-
-        Cuisines[cuisineIndex] = updatedCuisine;
-
-        res.status(200).json({cuisine:updatedCuisine});
+        res.status(200).json({ cuisine: cuisine.toObject({ getters:true }) });
     }
 
     // Function to create route for deleting cuisine
