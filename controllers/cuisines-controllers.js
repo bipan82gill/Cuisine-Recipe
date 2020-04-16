@@ -137,13 +137,22 @@ const getCuisinesByChefId = async (req, res, next) => {
 
         let cuisine;
         try{
-            cuisine = await Cuisine.findById(cuisineId);
+            cuisine = await Cuisine.findById(cuisineId).populate('creator');
         }catch(err){
             const error = new HttpError('Could not find cuisine to delete', 500);
             return next(error);
         }
+        if(!cuisine){
+            const error = new HttpError('Could not find cuisine for this id', 404);
+            return next(error); 
+        }
         try{
-            await cuisine.remove();
+            const sess = await mongoose.startSession();
+            sess.startTransaction();
+            await cuisine.remove({ session : sess});
+            cuisine.creator.cuisines.pull(cuisine);
+            await cuisine.creator.save({ session:sess});
+            await sess.commitTransaction();
         }catch(err){
             const error = new HttpError('Could not find cuisine to delete', 500);
             return next(error);
