@@ -1,20 +1,9 @@
-const uuid = require('uuid/v4');
 const { validationResult } = require('express-validator');
 const mongoose = require('mongoose');
+
 const HttpError = require('../models/http-error');
 const Cuisine = require('../models/cuisine');
 const Chef = require('../models/chef');
-
-
-// dummy data to retrieve data for checking routes
-    let Cuisines = [
-        {
-        id: 'c1',
-        title: 'Samosa',
-        recipe : ' shcehrfyuerh dbwhduewhf ',
-        creator: 'u1'
-        }
-    ];
 
 // Function to get Cuisine by Cuisine id 
 const getCuisineById = async(req, res, next) => {

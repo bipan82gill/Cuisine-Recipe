@@ -1,17 +1,7 @@
-const uuid = require('uuid/v4');
 const { validationResult } = require('express-validator');
 
 const HttpError = require('../models/http-error');
 const Chef = require('../models/chef');
-
-const Chef_Data =[
-    {
-        id: "c1",
-        name : "Sanjeev Kapoor",
-        email: "sanjeev@gmail.com",
-        password: "san123"
-    }
-];
 
 // Function to get data of all chefs
 const getChefs = async(req, res, next) => {
@@ -83,9 +73,6 @@ const login = async(req, res, next) => {
         return next(error);
     }
     res.json({message: "Logged in !!!"})
-
-
-
 }
 
 exports.getChefs = getChefs;
