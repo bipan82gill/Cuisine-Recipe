@@ -40,20 +40,20 @@ const getCuisineById = async(req, res, next) => {
 const getCuisinesByChefId = async (req, res, next) => {
     const chefId = req.params.chefid;
     
-    let cuisines
+    let chefWithCuisines
     try{
-      cuisines = await Cuisine.find({ creator: chefId})
+        chefWithCuisines = await Chef.findById(chefId).populate('cuisines');
     }
     catch (err){
         const error = new HttpError('Fetching Cuisines failed, Please try again later',500);
         return next(error);
     }
 
-    if(!cuisines || cuisines.length === 0){
-        return next(new HttpError('Could not find a cuisines for a provided  chef id.', 404));       
+    if(!chefWithCuisines || chefWithCuisines.cuisines.length === 0){
+        return next(new HttpError('Could not find a ChefWithCuisines for a provided  chef id.', 404));       
         }
     
-    res.json({ cuisines: cuisines.map(cuisine => cuisine.toObject({ getters:true })  ) });
+    res.json({ cuisines: chefWithCuisines.cuisines.map(cuisine => cuisine.toObject({ getters:true })  ) });
     }
 
     // create Cuisine route and apply validation 
@@ -133,8 +133,9 @@ const getCuisinesByChefId = async (req, res, next) => {
 
     // Function to create route for deleting cuisine
     const deleteCuisine = async(req, res, next) => {
+        //id to delete a cuisine
         const cuisineId = req.params.cid;
-
+        //find a cuisine and check its chef
         let cuisine;
         try{
             cuisine = await Cuisine.findById(cuisineId).populate('creator');
@@ -142,10 +143,12 @@ const getCuisinesByChefId = async (req, res, next) => {
             const error = new HttpError('Could not find cuisine to delete', 500);
             return next(error);
         }
+        // if cuisine does not exist send error
         if(!cuisine){
             const error = new HttpError('Could not find cuisine for this id', 404);
             return next(error); 
         }
+        // for deleting specific cuisine use a session for this transaction 
         try{
             const sess = await mongoose.startSession();
             sess.startTransaction();
@@ -153,10 +156,13 @@ const getCuisinesByChefId = async (req, res, next) => {
             cuisine.creator.cuisines.pull(cuisine);
             await cuisine.creator.save({ session:sess});
             await sess.commitTransaction();
-        }catch(err){
+        }
+        //if transaction fails send this error
+        catch(err){
             const error = new HttpError('Could not find cuisine to delete', 500);
             return next(error);
         }
+        //if transaction successful send this respond
         res.status(200).json({ message: "Deleting Cuisine ...."});
     }
 
