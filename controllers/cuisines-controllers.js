@@ -1,8 +1,9 @@
 const uuid = require('uuid/v4');
 const { validationResult } = require('express-validator');
-
+const mongoose = require('mongoose');
 const HttpError = require('../models/http-error');
 const Cuisine = require('../models/cuisine');
+const Chef = require('../models/chef');
 
 
 // dummy data to retrieve data for checking routes
@@ -72,10 +73,28 @@ const getCuisinesByChefId = async (req, res, next) => {
             url_video: "https://www.youtube.com/watch?v=ofedNWj43bY",
             creator
         });
+        let chef;
         try{
-            await createCuisine.save();    
+            chef = await Chef.findById(creator);
+
+        }catch(err){
+            const error = new HttpError('Creating cuisine failed, please try again.',500);
+            return next(error);
+        }
+        if(!chef){
+            const error = new HttpError('Could not find chef for this id.',404);
+            return next(error);
+        }
+        try{
+            const sess = await mongoose.startSession();
+            sess.startTransaction();
+            await createCuisine.save({ session: sess});
+            chef.cuisines.push(createCuisine);
+            await chef.save({ session: sess});
+            await sess.commitTransaction();
+
         } catch (err) {
-            const error = new HttpError('Creating place failed, please try again.',500);
+            const error = new HttpError('Creating cuisine failed, please try again.',500);
             return next(error);
         }
 

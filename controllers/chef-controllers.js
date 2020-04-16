@@ -14,8 +14,16 @@ const Chef_Data =[
 ];
 
 // Function to get data of all chefs
-const getChefs = (req, res, next) => {
-    res.json({chefs: Chef_Data});
+const getChefs = async(req, res, next) => {
+    let chefs;
+    try{
+        chefs = await Chef.find({},'-password');
+    }catch (err){
+        const error = new HttpError('Fail to find Chef, try again ',500);
+        return next(error);
+    }
+
+    res.json({chefs: chefs.map(chef => chef.toObject({ getters:true}) ) });
 }
 
 // function to signup new chef 
@@ -28,7 +36,7 @@ const signup = async(req, res, next) => {
                 new HttpError('Invalid input passed, please check your data', 422)) 
         }
 
-    const { name, email, password , cuisines } = req.body;
+    const { name, email, password } = req.body;
     // Check for Chef is exist already 
     let existingChef
     try{
@@ -47,7 +55,7 @@ const signup = async(req, res, next) => {
        email,
        image: "https://www.indianhealthyrecipes.com/wp-content/uploads/2012/11/gulab-jamun-recipe-480x270.jpg",
        password,
-       cuisines
+       cuisines:[]
     });
     try{
         await newChef.save();

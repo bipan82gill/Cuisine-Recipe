@@ -8,7 +8,7 @@ const chefSchema = new Schema({
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true, minlength:6 },
     image: { type: String, required: true },
-    cuisines: { type: String, required: true }
+    cuisines: [{ type: mongoose.Types.ObjectId, required: true, ref:'Cuisine' }]
 });
 
 chefSchema.plugin(uniqueValidator);
