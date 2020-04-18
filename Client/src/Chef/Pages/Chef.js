@@ -1,42 +1,29 @@
 import React, { useEffect, useState } from 'react';
 
+import { useHttpClient } from '../../Shared/Hooks/http-hook';
 import ChefList from '../Components/ChefList';
 import ErrorModal from '../../Shared/Components/UIElement/ErrorModal';
 import LoadingSpinner from '../../Shared/Components/UIElement/LoadingSpinner';
 
 const Chef =() => {
 
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState();
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
     const [loadedChefs, setLoadedChefs] = useState();
 
     useEffect(() => {
-        const sendRequest = async () => {
-            setIsLoading(true);
-
+        const fetchChefs = async () => {
+           
             try{
-                const response = await fetch('http://localhost:5000/api/chefs');
-                const responseData = await response.json();
-                
-                if(!response.ok){
-                    throw new Error(responseData.message);
-                }
+                const responseData = await sendRequest('http://localhost:5000/api/chefs');
+                      
                 setLoadedChefs(responseData.chefs);
-                setIsLoading(false);
-            }catch(err){
-                setIsLoading(false);
-                setError(err.message);
-            }            
+            }catch(err){}            
         };
-        sendRequest();
-    }, []);
-
-    const errorHandler =() => {
-        setError(null);
-    }
+        fetchChefs();
+    }, [sendRequest]);
     return(
         <React.Fragment>
-        <ErrorModal error={error} onClear ={errorHandler}/>
+        <ErrorModal error={error} onClear ={clearError}/>
         {isLoading && (
             <div className ="center">
                 <LoadingSpinner />

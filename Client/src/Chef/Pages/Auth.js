@@ -4,6 +4,7 @@ import Card from '../../Shared/Components/UIElement/Card';
 import Input from '../../Shared/Components/UIElement/FormComponents/Input';
 import Button from '../../Shared/Components/UIElement/FormComponents/Button';
 import { useForm } from  '../../Shared/Hooks/form-hook';
+import { useHttpClient } from '../../Shared/Hooks/http-hook';
 import {VALIDATOR_EMAIL, VALIDATOR_MINLENGTH,VALIDATOR_REQUIRE} from '../../Shared/Util/validators';
 import { AuthContext } from '../../Shared/Context/Auth-context';
 import LoadingSpinner from '../../Shared/Components/UIElement/LoadingSpinner';
@@ -13,9 +14,9 @@ import './Auth.css';
 
 const Auth = () => {
     const auth = useContext(AuthContext);
-    const [isLoginMode,setIsLoginMode] = useState(true);
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState();
+    const [isLoginMode, setIsLoginMode] = useState(true);
+    const { isLoading, error, sendRequest, clearError } = useHttpClient();
+
     const [formState, inputHandler, setFormData] = useForm(
        {
             email:{
@@ -53,105 +54,53 @@ const Auth = () => {
         }
         setIsLoginMode(prevMode => !prevMode);
     }
-    // const authSubmitHandler = async event =>{
-    //     event.preventDefault();
-
-    //     if(isLoginMode){
-
-    //     }else{
-    //         try{
-    //             const response = await fetch('http://localhost:5000/api/chefs/signup',
-    //             {
-    //                 method: 'POST',
-    //                 headers: {
-    //                     'Content-Type': 'application/json'
-    //                 },
-    //                 body: JSON.stringify({
-    //                     name: formState.inputs.name.value,
-    //                     email: formState.inputs.email.value,
-    //                     password: formState.inputs.password.value
-    //                 })
-    //             });
-    //             const data = await response.json();
-    //             console.log(data);
-    //         }catch(err)
-    //         {
-    //             console.log(err);
-    //         }
-       
-    // }
-    //     auth.login();
-    // }
 
     const authSubmitHandler = async event => {
         event.preventDefault();
-       
-        setIsLoading(true);
     
         if (isLoginMode) {
-          try {
-            const formData = new FormData();
-            formData.append('email', formState.inputs.email.value);
-            formData.append('name', formState.inputs.name.value);
-            formData.append('password', formState.inputs.password.value);
-            formData.append('image', formState.inputs.image.value);
-            const response = await fetch('http://localhost:5000/api/chefs/login', {
-              method: 'POST',
-              formData,
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({
+            // const formData = new FormData();
+            //       formData.append('email', formState.inputs.email.value);
+            //       formData.append('name', formState.inputs.name.value);
+            //       formData.append('password', formState.inputs.password.value);
+            //       formData.append('image', formState.inputs.image.value);
+           try{
+            await sendRequest(
+              'http://localhost:5000/api/chefs/login',
+              'POST',
+               JSON.stringify({
                 email: formState.inputs.email.value,
                 password: formState.inputs.password.value
-              })
-            });
-    
-            const responseData = await response.json();
-            if (!response.ok) {
-              throw new Error(responseData.message);
-            }
-            setIsLoading(false);
+              }),
+              {
+                'Content-Type': 'application/json'
+              }
+            );
+
             auth.login();
-          } catch (err) {
-            setIsLoading(false);
-            setError(err.message || 'Something went wrong, please try again.');
-          }
+          }catch(err){}
+ 
         } else {
           try {
-            const response = await fetch('http://localhost:5000/api/chefs/signup', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({
+            await sendRequest(
+              'http://localhost:5000/api/chefs/signup',
+              'POST',
+              JSON.stringify({
                 name: formState.inputs.name.value,
                 email: formState.inputs.email.value,
                 password: formState.inputs.password.value
-              })
-            });
-    
-            const responseData = await response.json();
-            console.log(response);
-      
-            if (!response.ok) {
-              throw new Error(responseData.message);
-            }
-            setIsLoading(false);
+              }),
+             {
+                'Content-Type': 'application/json'
+              }
+            )
             auth.login();
-          } catch (err) {
-            setIsLoading(false);
-            console.log(err, err.message);
-            setError(err.message || 'Something went wrong, please try again.');
-          }
+          } catch (err) {}
         }
-      };
-      const errorHandler = () => {
-        setError(null);
       };
     return (
         <React.Fragment>
-            <ErrorModal error={error} onClear={errorHandler} />
+            <ErrorModal error={error} onClear={clearError} />
         <Card className = "authentication">
             {isLoading && <LoadingSpinner asOverlay />}
             <h1>Login Required</h1>
