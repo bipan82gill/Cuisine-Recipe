@@ -4,12 +4,14 @@ const { check } = require('express-validator');
 const router = express.Router();
 
 const chefControllers = require('../controllers/chef-controllers');
+const fileUpload = require('../middleware/file-upload');
 
 // route to get chef information
 router.get('/', chefControllers.getChefs);
 
 // route to signup
 router.post('/signup',
+        fileUpload.single('image'),
     [
         check('name')
         .not()

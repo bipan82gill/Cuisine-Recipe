@@ -6,12 +6,22 @@ const cuisineRouter = require('./routes/cuisine-routes');
 const chefRouter = require('./routes/chef-routes');
 const HttpError = require('./models/http-error');
 
-// const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 
 const app = express();
 
 app.use(bodyParser.json());
 
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader(
+      'Access-Control-Allow-Headers',
+      'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+    );
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE');
+  
+    next();
+  });
 app.use('/api/cuisines',cuisineRouter);
 app.use('/api/chefs',chefRouter);
 
@@ -28,10 +38,10 @@ app.use((error, req, res, next) => {
     res.json({ message: error.message || 'An Unknown error occured'});
 });
 mongoose
-.connect('mongodb+srv://bipanjeet:jap30milan16@cluster0-envva.mongodb.net/cuisines?retryWrites=true&w=majority')
+.connect('mongodb+srv://bipanjeet:jap30milan16@cluster0-envva.mongodb.net/mern?retryWrites=true&w=majority')
 .then(()=>{
-    app.listen(3000, function() {
-        console.log(`server is running http://localhost:3000`);
+    app.listen(5000, function() {
+        console.log(`server is running http://localhost:5000`);
     });
 })
 .catch(err => {

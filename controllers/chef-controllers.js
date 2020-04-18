@@ -3,6 +3,7 @@ const { validationResult } = require('express-validator');
 const HttpError = require('../models/http-error');
 const Chef = require('../models/chef');
 
+
 // Function to get data of all chefs
 const getChefs = async(req, res, next) => {
     let chefs;
@@ -18,6 +19,7 @@ const getChefs = async(req, res, next) => {
 
 // function to signup new chef 
 const signup = async(req, res, next) => {
+   
     const errors=  validationResult(req);
 
         if(!errors.isEmpty()){
