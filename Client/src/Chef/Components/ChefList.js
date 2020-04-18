@@ -21,7 +21,7 @@ const ChefList = props =>{
          id ={chef.id} 
          image = {chef.image} 
          name={chef.name}
-         cuisineCount={chef.cuisines} />
+         cuisineCount={chef.cuisines.length} />
          
         ))}
     </ul>
