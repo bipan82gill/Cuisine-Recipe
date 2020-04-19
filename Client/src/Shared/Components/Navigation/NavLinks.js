@@ -13,7 +13,7 @@ return(
         </li>
         {(auth.isLoggedIn && 
         <li>
-            <NavLink to="/cuisines">CUISINES</NavLink>
+            <NavLink to={`/${auth.chefId}/cuisines`}>CUISINES</NavLink>
         </li>
         )}
         {(auth.isLoggedIn && 

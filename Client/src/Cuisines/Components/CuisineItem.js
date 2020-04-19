@@ -78,8 +78,8 @@ const CuisineItem = props =>{
                 </div>
                 <div className="cuisine-item__actions">
                     <Button inverse onClick={openRecipeHandler}>WATCH VIDEO</Button>
-                    {auth.isLoggedIn && <Button to={`/cuisines/${props.id}`}>EDIT</Button>}
-                    {auth.isLoggedIn && <Button danger onClick = {showDeleteWarningHandler}>DELETE</Button>}
+                    {auth.chefId === props.creatorId && <Button to={`/cuisines/${props.id}`}>EDIT</Button>}
+                    {auth.chefId === props.creatorId && <Button danger onClick = {showDeleteWarningHandler}>DELETE</Button>}
                 </div>
                 
             </Card>
