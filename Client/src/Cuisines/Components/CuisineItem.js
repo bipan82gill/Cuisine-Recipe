@@ -3,11 +3,15 @@ import React, { useState, useContext } from 'react';
 import Card from "../../Shared/Components/UIElement/Card";
 import Button from "../../Shared/Components/UIElement/FormComponents/Button";
 import Modal from "../../Shared/Components/UIElement/Modal";
-import {AuthContext} from '../../Shared/Context/Auth-context';
+import ErrorModal from '../../Shared/Components/UIElement/ErrorModal';
+import LoadingSpinner from '../../Shared/Components/UIElement/LoadingSpinner';
+import { AuthContext } from '../../Shared/Context/Auth-context';
+import { useHttpClient } from '../../Shared/Hooks/http-hook';
 import './CuisineItem.css';
 
 const CuisineItem = props =>{
     const auth = useContext(AuthContext);
+    const { isLoading, error, sendRequest, clearError } = useHttpClient();
     const [showRecipe, setShowRecipe]= useState(false);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
 
@@ -20,15 +24,24 @@ const CuisineItem = props =>{
    };
    const cancelDeleteHandler = () => {
        setShowConfirmModal(false);
+       
    }
 
-   const confirmDeleteHandler = () => { 
-    setShowConfirmModal(false);   
+   const confirmDeleteHandler = async() => { 
+    setShowConfirmModal(false);  
+    try{
+        await sendRequest(`
+        http://localhost:5000/api/cuisines/${props.id}`,
+        'DELETE'
+        )
+        props.onDelete(props.id);
+       }catch(err){} 
     console.log('DELETING...');
     }
 
     return (
         <React.Fragment>
+        <ErrorModal error={error} onClear ={clearError}/>
         <Modal 
             show = {showRecipe} 
             onCancel ={closeRecipeHandler} 
@@ -55,6 +68,7 @@ const CuisineItem = props =>{
         </Modal>
         <li className="cuisine-item">
             <Card className="cuisine-item__content">
+                {isLoading && <LoadingSpinner asOverlay/>}
                 <div className ="cuisine-item__image">
                     <img src={props.image} alt={props.title} />
                 </div>

@@ -24,14 +24,18 @@ const ChefCuisines =() =>{
         fetchCuisines();
     }, [ sendRequest, chefId ]);
 
-   
+    const cuisineDeleteHandler = deletedCuisineId =>{
+        setLoadedCuisines(prevCuisines =>
+            prevCuisines.filter(cuisine => cuisine.id !== deletedCuisineId)
+        );
+    }
     return (
     <React.Fragment>
     <ErrorModal error={error} onClear={clearError}/>
     {isLoading && <div className ="center">
         <LoadingSpinner asOverlay />
     </div>}
-    {!isLoading && loadedCuisines && <CuisineList items={loadedCuisines} />}
+    {!isLoading && loadedCuisines && <CuisineList items={loadedCuisines} onDeleteCuisine={cuisineDeleteHandler} />}
     </React.Fragment>
     )
 }

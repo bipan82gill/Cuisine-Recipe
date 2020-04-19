@@ -30,6 +30,7 @@ const CuisineList = props => {
                  recipe={cuisine.recipe}
                  ingredients={cuisine.ingredients}
                  creatorId={cuisine.creator}
+                 onDelete={props.onDeleteCuisine}
             />
             ))}
         </ul>
