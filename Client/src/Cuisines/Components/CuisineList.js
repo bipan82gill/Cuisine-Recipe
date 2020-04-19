@@ -28,9 +28,10 @@ const CuisineList = props => {
                  image ={cuisine.image} 
                  title={cuisine.title}
                  recipe={cuisine.recipe}
+                 ingredients={cuisine.ingredients}
                  creatorId={cuisine.creator}
             />
-            ))};
+            ))}
         </ul>
         );
 }

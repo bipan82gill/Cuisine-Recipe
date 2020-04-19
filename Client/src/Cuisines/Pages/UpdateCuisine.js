@@ -1,66 +1,89 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState, useContext } from 'react';
+import { useParams, useHistory } from 'react-router-dom';
 
 import Input from "../../Shared/Components/UIElement/FormComponents/Input";
 import Button from '../../Shared/Components/UIElement/FormComponents/Button';
 import Card from '../../Shared/Components/UIElement/Card';
+import ErrorModal from '../../Shared/Components/UIElement/ErrorModal';
+import LoadingSpinner from '../../Shared/Components/UIElement/LoadingSpinner';
 import { VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH } from '../../Shared/Util/validators';
 import { useForm } from '../../Shared/Hooks/form-hook';
+import { useHttpClient } from '../../Shared/Hooks/http-hook';
+import { AuthContext } from '../../Shared/Context/Auth-context';
 import './NewCuisine.css';
 
-const Cuisines=[{
-        id:"CU1",
-        title:"Gulab Jamun",
-        image:"https://baliindiancuisine.com/wp-content/uploads/2015/11/Sanjeev-Kapoor-indian-recipe-of-gulab-jamun-452x262.jpg",
-        recipe:"fjhdjfhejf jehfueirhf hejhferhguerd",
-        url_vedio:"http://www.google.com",
-        creator:"C1"
-    }]
+
 
 const UpdateCuisine = () =>{
-    const [isLoading, setIsLoading] = useState(true);
+    const auth = useContext(AuthContext);
+    const { isLoading, error, sendRequest, clearError } = useHttpClient();
+    const [ loadedCuisine, setLoadedCuisine ] = useState();
     
     const cuisineId = useParams().cuisineId;
+    const history = useHistory();
 
     const [formState, inputHandler, setFormData] = useForm({
         title:{
             value: '',
             isValid:false
         },
-        recipe:{
+        ingredients:{
             value: '',
             isValid:false
          }
-        // url_vedio:{
-        //     value: identifiedCuisine.url_vedio,
-        //     isValid:true
-        // }
+        
     }, false);
 
-    const identifiedCuisine =Cuisines.find(cuisine => cuisine.id === cuisineId);
-
     useEffect(()=>{
-        if(identifiedCuisine){
-            setFormData({
-                title:{
-                    value: identifiedCuisine.title,
-                    isValid: true
-                },
-                recipe:{
-                    value: identifiedCuisine.recipe,
-                    isValid:true
-                 }
-            },true);
-        }
+     try{
+        const fetchCuisine = async() => {
+        const responseData = await sendRequest(`http://localhost:5000/api/cuisines/${cuisineId}`);
         
-        setIsLoading(false);
-    },[setFormData, identifiedCuisine])
-    
-    const cuisineUpdateSubmitHandler = event =>{
+        setLoadedCuisine(responseData.cuisine);
+        setFormData({
+            title:{
+                value: responseData.cuisine.title,
+                isValid: true
+            },
+            ingredients:{
+                value: responseData.cuisine.ingredients,
+                isValid:true
+             }
+        },true);
+        };
+        fetchCuisine();
+     }catch(err){}
+     
+   
+
+    }, [ sendRequest, cuisineId, setFormData ]);
+
+    const cuisineUpdateSubmitHandler = async event =>{
         event.preventDefault();
-        console.log(formState.inputs)
+       try{
+        await sendRequest(`
+        http://localhost:5000/api/cuisines/${cuisineId}`,
+        'PATCH',
+        JSON.stringify({
+            title: formState.inputs.title.value,
+            ingredients: formState.inputs.ingredients.value
+        }),
+        { 'Content-Type': 'application/json'}
+
+    )
+    history.push('/'+ auth.chefId + '/cuisines');
+    }catch(err){}
     };
-    if(!identifiedCuisine){
+
+    if(isLoading){
+        return(
+            <div className ="center">
+            <LoadingSpinner />
+            </div>
+        )
+    }
+
+    if(!loadedCuisine && !error ){
         return(
             <div className ="center">
                 <Card>
@@ -69,17 +92,11 @@ const UpdateCuisine = () =>{
             </div>
         )
     }
-
-    if(isLoading){
-        return(
-            <div className ="center">
-            <h2>Loading...</h2>
-            </div>
-        )
-    }
     
     return (
-    <form className ="cuisine-form" onSubmit ={cuisineUpdateSubmitHandler}>
+    <React.Fragment>
+        <ErrorModal error ={error} onClear={clearError}/>
+    { !isLoading && loadedCuisine && <form className ="cuisine-form" onSubmit ={cuisineUpdateSubmitHandler}>
     <Input
         id ="title" 
         element ="input"
@@ -88,33 +105,25 @@ const UpdateCuisine = () =>{
         validators={[VALIDATOR_REQUIRE()]} 
         errorText="Please enter valid text"
         onInput={inputHandler}
-        initialValue ={formState.inputs.title.value}
-        initialValid={formState.inputs.title.isValid}
+        initialValue ={loadedCuisine.title}
+        initialValid={true}
     />
 
     <Input 
-        id ="recipe"
-        element = "textarea" 
-        label ="Recipe" 
-        validators={[VALIDATOR_MINLENGTH(5)]} 
-        errorText="Please enter a valid recipe(atleast 5 characters)"
+        id ="ingredients"
+        element = "input" 
+        label ="ingredients" 
+        validators={[VALIDATOR_REQUIRE()]} 
+        errorText="Please enter a valid ingredients"
         onInput={inputHandler}
-        initialValue ={formState.inputs.recipe.value}
-        initialValid={formState.inputs.recipe.isValid}
+        initialValue ={loadedCuisine.ingredients}
+        initialValid={true}
     />  
 
-    {/* <Input 
-        id ="url_video"
-        element = "input" 
-        label ="Video URL" 
-        validators={[VALIDATOR_REQUIRE()]} 
-        errorText="Please enter a valid url of video"
-        onInput={inputHandler}
-        initialValue ={formState.inputs.url_video.value}
-        initialValid={formState.inputs.url_video.isValid}
-    /> */}
-    <Button type="submit" disabled={!formState.isValid}>UPDATE RECIPE</Button>       
-</form>
+    
+    <Button type="submit" disabled={!formState.isValid}>UPDATE CUISINE</Button>       
+</form>}
+</React.Fragment>
     )
 }
 export default UpdateCuisine;

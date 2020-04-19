@@ -31,7 +31,9 @@ router.patch('/:cid',
         check('title')
         .not()
         .isEmpty(),
-        check('recipe').isLength({min:5})
+        check('ingredients')
+        .not()
+        .isEmpty()
     ],
  cuisineControllers.updateCuisine);
 

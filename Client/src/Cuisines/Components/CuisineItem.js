@@ -60,7 +60,7 @@ const CuisineItem = props =>{
                 </div>
                 <div className ="cuisine-item__info">
                     <h2>{props.title}</h2>
-                    <p>{props.recipe}</p>
+                    <p>{props.ingredients}</p>
                 </div>
                 <div className="cuisine-item__actions">
                     <Button inverse onClick={openRecipeHandler}>WATCH VIDEO</Button>
@@ -71,7 +71,7 @@ const CuisineItem = props =>{
             </Card>
         </li>
     </React.Fragment>
-    );
+    )
 
 }
 

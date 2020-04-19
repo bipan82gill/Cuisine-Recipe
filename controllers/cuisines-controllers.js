@@ -99,7 +99,7 @@ const getCuisinesByChefId = async (req, res, next) => {
             throw new HttpError('Invalid input passed, please check your data', 422);
         }
 
-        const { title, recipe } = req.body;
+        const { title, ingredients } = req.body;
         const cuisineId = req.params.cid;
         let cuisine;
         try{
@@ -110,7 +110,7 @@ const getCuisinesByChefId = async (req, res, next) => {
         }
 
         cuisine.title = title;
-        cuisine.recipe =recipe;
+        cuisine.ingredients =ingredients;
         try {
           await cuisine.save();
         } catch (err) {
