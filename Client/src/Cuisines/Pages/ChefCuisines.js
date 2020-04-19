@@ -1,22 +1,39 @@
-import React from 'react';
-import {useParams} from 'react-router-dom';
+import React, { useEffect , useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { useHttpClient } from '../../Shared/Hooks/http-hook';
 
+import ErrorModal from '../../Shared/Components/UIElement/ErrorModal';
+import LoadingSpinner from '../../Shared/Components/UIElement/LoadingSpinner';
 import CuisineList from '../Components/CuisineList';
 
-const Cuisines=[
-    {
-    id:"CU1",
-    title:"Gulab Jamun",
-    image:"https://baliindiancuisine.com/wp-content/uploads/2015/11/Sanjeev-Kapoor-indian-recipe-of-gulab-jamun-452x262.jpg",
-    recipe:"fjhdjfhejf jehfueirhf hejhferhguerd",
-    creator:"C1"
-}
-]
+
 
 const ChefCuisines =() =>{
+    const [ loadedCuisines, setLoadedCuisines ] = useState();
+    const { isLoading, error, sendRequest, clearError } = useHttpClient();
+
     const chefId = useParams().chefId;
-    const loadedCuisines = Cuisines.filter(cuisine => cuisine.creator === chefId);
-    return <CuisineList items={loadedCuisines} />
+
+    useEffect(()=>{
+        const fetchCuisines= async() => {
+          try{
+                const responseData = await sendRequest(`http://localhost:5000/api/cuisines/chef/${chefId}`);
+                setLoadedCuisines(responseData.cuisines);
+        }catch(err){}
+    }
+        fetchCuisines();
+    }, [ sendRequest, chefId ]);
+
+   
+    return (
+    <React.Fragment>
+    <ErrorModal error={error} onClear={clearError}/>
+    {isLoading && <div className ="center">
+        <LoadingSpinner asOverlay />
+    </div>}
+    {!isLoading && loadedCuisines && <CuisineList items={loadedCuisines} />}
+    </React.Fragment>
+    )
 }
 
 export default ChefCuisines;
