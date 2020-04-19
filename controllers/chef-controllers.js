@@ -28,7 +28,7 @@ const signup = async(req, res, next) => {
                 new HttpError('Invalid input passed, please check your data', 422)) 
         }
 
-    const { name, email, password } = req.body;
+    const { name, email, image, password } = req.body;
     // Check for Chef is exist already 
     let existingChef
     try{
@@ -45,7 +45,7 @@ const signup = async(req, res, next) => {
     const newChef = new Chef({
        name,
        email,
-       image: "https://www.indianhealthyrecipes.com/wp-content/uploads/2012/11/gulab-jamun-recipe-480x270.jpg",
+       image:"https://www.indianhealthyrecipes.com/wp-content/uploads/2012/11/gulab-jamun-recipe-480x270.jpg",
        password,
        cuisines:[]
     });
@@ -74,7 +74,7 @@ const login = async(req, res, next) => {
         const error =new HttpError('Could not identify chef, credentials seem to be wrong', 401);
         return next(error);
     }
-    res.json({message: "Logged in !!!"})
+    res.json({message: "Logged in !!!", chef: existingChef.toObject({ getters:true }) })
 }
 
 exports.getChefs = getChefs;

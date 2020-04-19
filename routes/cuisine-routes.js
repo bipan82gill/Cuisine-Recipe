@@ -12,13 +12,14 @@ router.get('/:cid', cuisineControllers.getCuisineById);
 router.get('/chef/:chefid', cuisineControllers.getCuisinesByChefId);
 
 // route to create new cuisine and check validation for title
-router.post('/',
+router.post(
+    '/',
     [
         check('title')
-        .not().
-        isEmpty(), 
+        .not()
+        .isEmpty(), 
         check('recipe').isLength({min:5}),
-        check('creator')
+        check('ingredients')
         .not()
         .isEmpty()
     ],

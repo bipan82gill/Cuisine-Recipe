@@ -65,7 +65,7 @@ const Auth = () => {
             //       formData.append('password', formState.inputs.password.value);
             //       formData.append('image', formState.inputs.image.value);
            try{
-            await sendRequest(
+            const responseData = await sendRequest(
               'http://localhost:5000/api/chefs/login',
               'POST',
                JSON.stringify({
@@ -77,12 +77,12 @@ const Auth = () => {
               }
             );
 
-            auth.login();
+            auth.login(responseData.chef.id);
           }catch(err){}
  
         } else {
           try {
-            await sendRequest(
+            const responseData = await sendRequest(
               'http://localhost:5000/api/chefs/signup',
               'POST',
               JSON.stringify({
@@ -94,7 +94,7 @@ const Auth = () => {
                 'Content-Type': 'application/json'
               }
             )
-            auth.login();
+            auth.login(responseData.chef.id);
           } catch (err) {}
         }
       };

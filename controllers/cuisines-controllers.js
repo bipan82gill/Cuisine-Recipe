@@ -1,3 +1,4 @@
+const uuid = require('uuid/v4')
 const { validationResult } = require('express-validator');
 const mongoose = require('mongoose');
 
@@ -13,7 +14,7 @@ const getCuisineById = async(req, res, next) => {
             cuisine = await Cuisine.findById(cuisineId);
         }
         catch (err) {
-            const error = new HttpError('Something went wrong, could not find a cuisine', 500); 
+            const error = new HttpError('Something went wrong, could not find a cuisine,Please try again ', 500); 
             return next(error);  
         }
 
@@ -50,16 +51,16 @@ const getCuisinesByChefId = async (req, res, next) => {
         const errors = validationResult(req);
         if(!errors.isEmpty()){
             return next(
-                new HttpError('Input inputs passed, please check your data', 422)
+                new HttpError('Invalid inputs passed, please check your data', 422)
             );
         }
-        const {title, recipe, creator }= req.body;
+        const {title, recipe, ingredients, creator }= req.body;
 
         const createCuisine = new Cuisine({
             title,
             recipe,
             image: "https://www.indianhealthyrecipes.com/wp-content/uploads/2012/11/gulab-jamun-recipe-480x270.jpg",
-            url_video: "https://www.youtube.com/watch?v=ofedNWj43bY",
+            ingredients,
             creator
         });
         let chef;
