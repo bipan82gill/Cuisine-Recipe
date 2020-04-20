@@ -13,7 +13,7 @@ module.exports = (req, res, next) => {
         req.chefData = { chefId: decodedToken.chefId };
         next();
     }catch(err){
-        const error = new HttpError('Authentication failed',401);
+        const error = new HttpError('Authentication failed',403);
         return next(error);
     }
 }

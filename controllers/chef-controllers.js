@@ -94,7 +94,7 @@ const login = async(req, res, next) => {
     }
     
     if(!existingChef){
-        const error =new HttpError('Could not identify chef, credentials seem to be wrong', 401);
+        const error =new HttpError('Could not identify chef, credentials seem to be wrong', 403);
         return next(error);
     }
     let isValidPassword = false;

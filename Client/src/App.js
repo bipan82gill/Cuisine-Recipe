@@ -1,4 +1,4 @@
-import React, {useState, useCallback} from 'react';
+import React, {useState, useCallback, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Redirect, Switch} from 'react-router-dom';
 
 import Chef from './Chef/Pages/Chef';
@@ -14,15 +14,24 @@ const  App = () => {
   const [token , setToken] = useState(false);
   const[ chefId, setChefId ]= useState(false);
   
-  const login = useCallback((chefid, token)=>{
+    const login = useCallback((chefid, token)=>{
     setToken(token);
+    localStorage.setItem('chefData', JSON.stringify({chefId: chefid, token:token}))
     setChefId(chefid);
   },[]);
 
   const logout = useCallback(()=>{
     setToken(null);
     setChefId(null);
+    localStorage.removeItem('chefData');
   },[]);
+
+  useEffect(() => {
+    const storedData = JSON.parse(localStorage.getItem('chefData'));
+    if(storedData && storedData.token){
+      login( storedData.chefid, storedData.token)
+    }
+  },[login]);
 
   let routes;
 
