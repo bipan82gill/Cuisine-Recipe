@@ -6,6 +6,7 @@ import Input from "../../Shared/Components/UIElement/FormComponents/Input";
 import Button from '../../Shared/Components/UIElement/FormComponents/Button';
 import ErrorModal from '../../Shared/Components/UIElement/ErrorModal';
 import LoadingSpinner from '../../Shared/Components/UIElement/LoadingSpinner';
+import ImageUpload from '../../Shared/Components/UIElement/FormComponents/ImageUpload';
 
 import { VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH } from '../../Shared/Util/validators';
 import { useForm} from '../../Shared/Hooks/form-hook';
@@ -30,6 +31,10 @@ const NewCuisine = () => {
             ingredients:{
                 value:'',
                 isValid:false
+            },
+            image:{
+                value:null,
+                isValid:false
             }
         },false
     )
@@ -38,19 +43,18 @@ const NewCuisine = () => {
     const recipeSubmitHandler = async event =>{ 
         event.preventDefault();
         try{
+            const formData = new FormData();
+            formData.append('title', formState.inputs.title.value);
+            formData.append('recipe', formState.inputs.recipe.value);
+            formData.append('ingredients', formState.inputs.ingredients.value);
+            formData.append('creator', auth.chefId);
+            formData.append('image', formState.inputs.image.value);
             await sendRequest(
-            'http://localhost:5000/api/cuisines',
-             'POST',
-              JSON.stringify({
-                title: formState.inputs.title.value,
-                recipe: formState.inputs.recipe.value,
-                ingredients: formState.inputs.ingredients.value,
-                creator: auth.chefId
-            }),
-            { 'Content-Type': 'application/json' }
-        )
+            'http://localhost:5000/api/cuisines/add/recipe',
+            'POST',
+            formData
+        );
         history.push('/');
-        console.log(formState.inputs);
         }catch(err){}     
     }
     return(
@@ -85,6 +89,8 @@ const NewCuisine = () => {
                 errorText="Please enter ingredients for cuisine"
                 onInput={inputHandler}
             />
+             <ImageUpload center id ="image" onInput={inputHandler}errorText="Please provide an image"/>
+           
             <Button type="submit" disabled ={!formState.isValid}> ADD RECIPE</Button>       
         </form>
         </React.Fragment>

@@ -4,6 +4,7 @@ const router = express.Router();
 const { check } = require('express-validator');
 
 const cuisineControllers = require('../controllers/cuisines-controllers');
+const fileUpload = require('../middleware/file-upload');
 
 // route to get cuisine id 
 router.get('/:cid', cuisineControllers.getCuisineById);
@@ -13,7 +14,7 @@ router.get('/chef/:chefid', cuisineControllers.getCuisinesByChefId);
 
 // route to create new cuisine and check validation for title
 router.post(
-    '/',
+    '/add/recipe',fileUpload.single('image'),
     [
         check('title')
         .not()

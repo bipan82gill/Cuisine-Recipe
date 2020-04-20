@@ -59,7 +59,7 @@ const getCuisinesByChefId = async (req, res, next) => {
         const createCuisine = new Cuisine({
             title,
             recipe,
-            image: "https://www.indianhealthyrecipes.com/wp-content/uploads/2012/11/gulab-jamun-recipe-480x270.jpg",
+            image: req.file.path,
             ingredients,
             creator
         });
