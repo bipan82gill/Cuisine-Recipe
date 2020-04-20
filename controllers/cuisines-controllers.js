@@ -1,4 +1,4 @@
-const uuid = require('uuid/v4')
+const fs = require('fs');
 const { validationResult } = require('express-validator');
 const mongoose = require('mongoose');
 
@@ -138,6 +138,7 @@ const getCuisinesByChefId = async (req, res, next) => {
             const error = new HttpError('Could not find cuisine for this id', 404);
             return next(error); 
         }
+        const imagePath = cuisine.image;
         // for deleting specific cuisine use a session for this transaction 
         try{
             const sess = await mongoose.startSession();
@@ -152,6 +153,9 @@ const getCuisinesByChefId = async (req, res, next) => {
             const error = new HttpError('Could not find cuisine to delete', 500);
             return next(error);
         }
+        fs.unlink(imagePath, err => {
+            console.log(err);
+        })
         //if transaction successful send this respond
         res.status(200).json({ message: "Deleting Cuisine ...."});
     }
