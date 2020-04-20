@@ -45,7 +45,7 @@ const signup = async(req, res, next) => {
     const newChef = new Chef({
        name,
        email,
-       image:"https://www.indianhealthyrecipes.com/wp-content/uploads/2012/11/gulab-jamun-recipe-480x270.jpg",
+       image: req.file.path ,
        password,
        cuisines:[]
     });

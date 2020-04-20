@@ -13,7 +13,7 @@ const ChefItem = props =>{
             <Card className ="chef-item__content">
                 <Link to={`/${props.id}/cuisines`}>
                 <div className ="chef-item__image">
-                    <Avatar image={props.image} alt={props.alt}/>
+                    <Avatar image={`http://localhost:5000/${props.image}`} alt={props.alt}/>
                 </div>
                 <div className ="chef-item__info">
                     <h2>{props.name}</h2>
