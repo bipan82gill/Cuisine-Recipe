@@ -2,6 +2,7 @@ const express = require('express');
 
 const router = express.Router();
 const { check } = require('express-validator');
+const checkAuth = require('../middleware/check-auth');
 
 const cuisineControllers = require('../controllers/cuisines-controllers');
 const fileUpload = require('../middleware/file-upload');
@@ -11,6 +12,8 @@ router.get('/:cid', cuisineControllers.getCuisineById);
 
 // route to get cuisine of specific chef 
 router.get('/chef/:chefid', cuisineControllers.getCuisinesByChefId);
+
+router.use(checkAuth);
 
 // route to create new cuisine and check validation for title
 router.post(

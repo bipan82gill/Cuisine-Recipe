@@ -75,7 +75,7 @@ const Auth = () => {
               }
             );
 
-            auth.login(responseData.chef.id);
+            auth.login(responseData.chefId,responseData.token);
           }catch(err){}
  
         } else {
@@ -90,7 +90,7 @@ const Auth = () => {
               'POST',
               formData            
             )
-            auth.login(responseData.chef.id);
+            auth.login(responseData.chefId,responseData.token);
           } catch (err) {}
         }
       };

@@ -52,7 +52,8 @@ const NewCuisine = () => {
             await sendRequest(
             'http://localhost:5000/api/cuisines/add/recipe',
             'POST',
-            formData
+            formData,
+            { Authorization:'Bearer ' + auth.token }
         );
         history.push('/');
         }catch(err){}     

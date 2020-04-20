@@ -1,4 +1,6 @@
 const { validationResult } = require('express-validator');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 const HttpError = require('../models/http-error');
 const Chef = require('../models/chef');
@@ -42,11 +44,22 @@ const signup = async(req, res, next) => {
         return next(error);
     }
 
+    let hashedPassword;
+    try{
+        hashedPassword = await bcrypt.hash(password, 12)
+    }catch(err){
+        const error = new HttpError(
+            'Could not create chef, please try again',
+            500
+        );
+        return next(error);
+    }
+
     const newChef = new Chef({
        name,
        email,
        image: req.file.path ,
-       password,
+       password: hashedPassword,
        cuisines:[]
     });
     try{
@@ -55,7 +68,17 @@ const signup = async(req, res, next) => {
         const error = new HttpError('Could not signup a chef, please try again', 500);
         return next(error);
     }
-    res.status(201).json({ chef: newChef.toObject({ getters:true }) });  
+    let token;
+    try{
+        token = jwt.sign({ chefId:newChef.id, email: newChef.email},
+            'supersecret_dont_share',
+            { expiresIn:'1h'})   
+    }catch(err){
+        const error = new HttpError('Could not signup a chef, please try again', 500);
+        return next(error);
+    }
+   
+    res.status(201).json({ chefId: newChef.id, email:newChef.email, token:token});  
 }
 
 // Function to login 
@@ -66,15 +89,36 @@ const login = async(req, res, next) => {
     try{
         existingChef = await Chef.findOne({ email :email });
     } catch (err){
-        const error = new HttpError('Logged in Failed , please try again',500);
+        const error = new HttpError('Logging is Failed , please try again',500);
         return next(error);
     }
     
-    if(!existingChef || existingChef.password !== password){
+    if(!existingChef){
         const error =new HttpError('Could not identify chef, credentials seem to be wrong', 401);
         return next(error);
     }
-    res.json({message: "Logged in !!!", chef: existingChef.toObject({ getters:true }) })
+    let isValidPassword = false;
+    try{
+        isValidPassword = await bcrypt.compare(password, existingChef.password);
+    }catch(err){
+        const error = new HttpError('Could not Login, check credentials, please try again',500);
+        return next(error);
+    }
+    if(!isValidPassword){
+        const error =new HttpError('Could not identify chef, credentials seem to be wrong', 401);
+        return next(error);
+    }
+
+    let token;
+    try{
+        token = jwt.sign({ chefId:existingChef.id, email: existingChef.email},
+            'supersecret_dont_share',
+            { expiresIn:'1h'})   
+    }catch(err){
+        const error = new HttpError('Logging is failed, please try again', 500);
+        return next(error);
+    }
+    res.json({ chefId:existingChef.id, email:existingChef.email, token:token })
 }
 
 exports.getChefs = getChefs;

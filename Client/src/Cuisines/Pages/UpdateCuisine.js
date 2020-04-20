@@ -68,7 +68,8 @@ const UpdateCuisine = () =>{
             title: formState.inputs.title.value,
             ingredients: formState.inputs.ingredients.value
         }),
-        { 'Content-Type': 'application/json'}
+        { 'Content-Type': 'application/json',
+           Authorization: 'Bearer ' + auth.token  }
 
     )
     history.push('/'+ auth.chefId + '/cuisines');
