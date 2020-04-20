@@ -2,7 +2,8 @@ import React, { useRef, useState, useEffect }from 'react';
 
 import './ImageUpload.css';
 import Button from './Button';
-const ImageUpload = props =>{
+
+const ImageUpload = props => {
     const [file, setFile] = useState();
     const [previewUrl, setPreviewUrl] = useState();
     const [isValid, setisValid] = useState(false);
@@ -16,7 +17,7 @@ const ImageUpload = props =>{
         const fileReader = new FileReader();
         fileReader.onload = () =>{
             setPreviewUrl(fileReader.result);
-        }
+        };
         fileReader.readAsDataURL(file);
     }, [file]);
 
