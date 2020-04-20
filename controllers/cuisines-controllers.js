@@ -142,6 +142,11 @@ const getCuisinesByChefId = async (req, res, next) => {
             const error = new HttpError('Could not find cuisine for this id', 404);
             return next(error); 
         }
+        if(cuisine.creator.id !== req.chefData.chefId){
+            const error = new HttpError('You are not allowed to delete this cuisine.',401)
+            return next(error);
+        }
+
         const imagePath = cuisine.image;
         // for deleting specific cuisine use a session for this transaction 
         try{
