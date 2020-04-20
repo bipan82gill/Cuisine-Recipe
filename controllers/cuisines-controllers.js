@@ -108,6 +108,10 @@ const getCuisinesByChefId = async (req, res, next) => {
             const error = new HttpError('Could not update cuisine, something went wrong', 500);
             return next(error);
         }
+        if(cuisine.creator.toString() !== req.chefData.chefId){
+            const error = new HttpError('You are not allowed to edit this cuisine.',401)
+            return next(error);
+        }
 
         cuisine.title = title;
         cuisine.ingredients =ingredients;
