@@ -54,18 +54,18 @@ const getCuisinesByChefId = async (req, res, next) => {
                 new HttpError('Invalid inputs passed, please check your data', 422)
             );
         }
-        const {title, recipe, ingredients, creator }= req.body;
+        const {title, recipe, ingredients }= req.body;
 
         const createCuisine = new Cuisine({
             title,
             recipe,
             image: req.file.path,
             ingredients,
-            creator
+            creator: req.chefData.chefId
         });
         let chef;
         try{
-            chef = await Chef.findById(creator);
+            chef = await Chef.findById(req.chefData.chefId);
 
         }catch(err){
             const error = new HttpError('Creating cuisine failed, please try again.',500);

@@ -47,7 +47,6 @@ const NewCuisine = () => {
             formData.append('title', formState.inputs.title.value);
             formData.append('recipe', formState.inputs.recipe.value);
             formData.append('ingredients', formState.inputs.ingredients.value);
-            formData.append('creator', auth.chefId);
             formData.append('image', formState.inputs.image.value);
             await sendRequest(
             'http://localhost:5000/api/cuisines/add/recipe',
