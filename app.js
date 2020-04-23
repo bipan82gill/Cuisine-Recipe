@@ -48,7 +48,10 @@ app.use((error, req, res, next) => {
     res.json({ message: error.message || 'An Unknown error occured'});
 });
 mongoose
-.connect('mongodb+srv://bipanjeet:jap30milan16@cluster0-envva.mongodb.net/mern?retryWrites=true&w=majority')
+.connect('mongodb+srv://bipanjeet:jap30milan16@cluster0-envva.mongodb.net/mern?retryWrites=true&w=majority',
+{ useUnifiedTopology: true,
+    useNewUrlParser: true
+})
 .then(()=>{
     app.listen(5000, function() {
         console.log(`server is running http://localhost:5000`);
