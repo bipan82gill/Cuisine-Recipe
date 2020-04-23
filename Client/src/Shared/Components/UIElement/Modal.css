@@ -26,6 +26,7 @@
 
 .modal__footer {
   padding: 1rem 0.5rem;
+  z-index:200;
 }
 
 @media (min-width: 768px) {

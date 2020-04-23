@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react';
+import ReactPlayer from 'react-player';
 
 import Card from "../../Shared/Components/UIElement/Card";
 import Button from "../../Shared/Components/UIElement/FormComponents/Button";
@@ -52,7 +53,8 @@ const CuisineItem = props =>{
             footerClass ="cuisine-item__modal-actions"
             footer={<Button onClick={closeRecipeHandler}>CLOSE</Button>}>
                 <div className ="recipe-container">
-                    <h2>The Recipe !</h2>
+                <ReactPlayer url={props.recipe}/>
+                    
                 </div>
         </Modal>
         <Modal 
