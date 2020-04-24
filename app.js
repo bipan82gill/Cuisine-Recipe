@@ -48,7 +48,7 @@ app.use((error, req, res, next) => {
     res.json({ message: error.message || 'An Unknown error occured'});
 });
 mongoose
-.connect('mongodb+srv://bipanjeet:jap30milan16@cluster0-envva.mongodb.net/mern?retryWrites=true&w=majority',
+.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0-envva.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`,
 { useUnifiedTopology: true,
     useNewUrlParser: true
 })
