@@ -74,7 +74,8 @@ const NewCuisine = () => {
 
             <Input 
                 id ="recipe"
-                element = "textarea" 
+                element = "input" 
+                type="text"
                 label ="Recipe_url" 
                 validators={[VALIDATOR_MINLENGTH(5)]} 
                 errorText="Please enter a valid recipe(atleast 5 characters)"
