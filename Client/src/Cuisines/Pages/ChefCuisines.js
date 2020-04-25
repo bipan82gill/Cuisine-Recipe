@@ -17,7 +17,7 @@ const ChefCuisines =() =>{
     useEffect(()=>{
         const fetchCuisines= async() => {
           try{
-                const responseData = await sendRequest(`http://localhost:5000/api/cuisines/chef/${chefId}`);
+                const responseData = await sendRequest(`/api/cuisines/chef/${chefId}`);
                 setLoadedCuisines(responseData.cuisines);
         }catch(err){}
     }

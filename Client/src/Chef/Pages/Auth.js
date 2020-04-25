@@ -64,7 +64,7 @@ const Auth = () => {
             
            try{
             const responseData = await sendRequest(
-              'http://localhost:5000/api/chefs/login',
+              '/api/chefs/login',
               'POST',
                JSON.stringify({
                 email: formState.inputs.email.value,
@@ -86,7 +86,7 @@ const Auth = () => {
                   formData.append('password', formState.inputs.password.value);
                   formData.append('image', formState.inputs.image.value);
             const responseData = await sendRequest(
-              'http://localhost:5000/api/chefs/signup',
+              '/api/chefs/signup',
               'POST',
               formData            
             )
