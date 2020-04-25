@@ -14,7 +14,7 @@ const Chef =() => {
         const fetchChefs = async () => {
            
             try{
-                const responseData = await sendRequest('http://localhost:5000/api/chefs');
+                const responseData = await sendRequest('/api/chefs');
                       
                 setLoadedChefs(responseData.chefs);
             }catch(err){}            

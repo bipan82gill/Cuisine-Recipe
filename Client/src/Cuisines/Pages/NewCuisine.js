@@ -8,7 +8,7 @@ import ErrorModal from '../../Shared/Components/UIElement/ErrorModal';
 import LoadingSpinner from '../../Shared/Components/UIElement/LoadingSpinner';
 import ImageUpload from '../../Shared/Components/UIElement/FormComponents/ImageUpload';
 
-import { VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH } from '../../Shared/Util/validators';
+import { VALIDATOR_REQUIRE } from '../../Shared/Util/validators';
 import { useForm} from '../../Shared/Hooks/form-hook';
 import { useHttpClient } from '../../Shared/Hooks/http-hook';
 import { AuthContext } from '../../Shared/Context/Auth-context';
@@ -49,7 +49,7 @@ const NewCuisine = () => {
             formData.append('ingredients', formState.inputs.ingredients.value);
             formData.append('image', formState.inputs.image.value);
             await sendRequest(
-            'http://localhost:5000/api/cuisines/add/recipe',
+            '/api/cuisines/add/recipe',
             'POST',
             formData,
             { Authorization:'Bearer ' + auth.token }
@@ -77,8 +77,8 @@ const NewCuisine = () => {
                 element = "input" 
                 type="text"
                 label ="Recipe_url" 
-                validators={[VALIDATOR_MINLENGTH(5)]} 
-                errorText="Please enter a valid recipe(atleast 5 characters)"
+                validators={[VALIDATOR_REQUIRE()]} 
+                errorText="Please enter a valid recipe_url"
                 onInput={inputHandler}
             />  
 

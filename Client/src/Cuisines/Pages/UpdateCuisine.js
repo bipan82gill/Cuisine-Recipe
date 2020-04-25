@@ -62,7 +62,7 @@ const UpdateCuisine = () =>{
         event.preventDefault();
        try{
         await sendRequest(`
-        http://localhost:5000/api/cuisines/${cuisineId}`,
+        /api/cuisines/${cuisineId}`,
         'PATCH',
         JSON.stringify({
             title: formState.inputs.title.value,

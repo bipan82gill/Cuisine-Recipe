@@ -32,7 +32,7 @@ const CuisineItem = props =>{
     setShowConfirmModal(false);  
     try{
         await sendRequest(`
-        http://localhost:5000/api/cuisines/${props.id}`,
+        /api/cuisines/${props.id}`,
         'DELETE',
         null,
         { Authorization: 'Bearer ' + auth.token }
