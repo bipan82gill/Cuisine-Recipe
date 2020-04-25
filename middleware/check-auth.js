@@ -1,4 +1,6 @@
+const keys = require('../keys');
 const jwt = require('jsonwebtoken');
+
 const HttpError = require('../models/http-error');
 module.exports = (req, res, next) => {
     if(req.method === 'OPTIONS'){
@@ -9,7 +11,8 @@ module.exports = (req, res, next) => {
         if(!token){
             throw new Error('Authentication failed');
         }
-        const decodedToken = jwt.verify(token,'supersecret_dont_share');
+        
+        const decodedToken = jwt.verify(token,keys.secrets.JWT_TOKEN);
         req.chefData = { chefId: decodedToken.chefId };
         next();
     }catch(err){

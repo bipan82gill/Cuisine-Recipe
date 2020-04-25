@@ -4,6 +4,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
+require('dotenv').config()
+
 
 const cuisineRouter = require('./routes/cuisine-routes');
 const chefRouter = require('./routes/chef-routes');
@@ -14,6 +16,15 @@ const PORT = process.env.PORT || 5000;
 const app = express();
 
 app.use(bodyParser.json());
+// Serve up static assets (usually on heroku)
+// if (process.env.NODE_ENV === "production") {
+//     app.use(express.static("client/build"));
+//   }
+
+// app.get("*", function(req, res) {
+//   res.sendFile(path.join(__dirname, "./client/build/index.html"));
+// });
+
 
 app.use('/uploads/images', express.static(path.join('uploads','images')))
 

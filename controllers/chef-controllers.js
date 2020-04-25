@@ -1,3 +1,4 @@
+const keys = require('../keys');
 const { validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -70,8 +71,9 @@ const signup = async(req, res, next) => {
     }
     let token;
     try{
+        
         token = jwt.sign({ chefId:newChef.id, email: newChef.email},
-            'supersecret_dont_share',
+            keys.secrets.JWT_TOKEN,
             { expiresIn:'1h'})   
     }catch(err){
         const error = new HttpError('Could not signup a chef, please try again', 500);
@@ -111,8 +113,10 @@ const login = async(req, res, next) => {
 
     let token;
     try{
+       
         token = jwt.sign({ chefId:existingChef.id, email: existingChef.email},
-            'supersecret_dont_share',
+            
+            keys.secrets.JWT_TOKEN,
             { expiresIn:'1h'})   
     }catch(err){
         const error = new HttpError('Logging is failed, please try again', 500);
