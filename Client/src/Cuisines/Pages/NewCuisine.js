@@ -49,7 +49,7 @@ const NewCuisine = () => {
             formData.append('ingredients', formState.inputs.ingredients.value);
             formData.append('image', formState.inputs.image.value);
             await sendRequest(
-            '/api/cuisines/add/recipe',
+            process.env.REACT_APP_BACKEND_URL+'/cuisines/add/recipe',
             'POST',
             formData,
             { Authorization:'Bearer ' + auth.token }

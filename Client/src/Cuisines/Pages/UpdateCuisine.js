@@ -37,7 +37,8 @@ const UpdateCuisine = () =>{
     useEffect(()=>{
      try{
         const fetchCuisine = async() => {
-        const responseData = await sendRequest(`/api/cuisines/${cuisineId}`);
+        const responseData = await sendRequest(`
+        ${process.env.REACT_APP_BACKEND_URL}/cuisines/${cuisineId}`);
         
         setLoadedCuisine(responseData.cuisine);
         setFormData({
@@ -62,7 +63,7 @@ const UpdateCuisine = () =>{
         event.preventDefault();
        try{
         await sendRequest(`
-        /api/cuisines/${cuisineId}`,
+        ${process.env.REACT_APP_BACKEND_URL}/cuisines/${cuisineId}`,
         'PATCH',
         JSON.stringify({
             title: formState.inputs.title.value,
