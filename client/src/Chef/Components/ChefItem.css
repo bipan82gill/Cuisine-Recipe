@@ -20,7 +20,7 @@
     background: #ffd900;
   }
   
-  .chef-item__content {
+  .card.chef-item__content {
     padding: 0;
   }
   
