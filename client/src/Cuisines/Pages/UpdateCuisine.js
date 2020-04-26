@@ -37,7 +37,7 @@ const UpdateCuisine = () =>{
     useEffect(()=>{
      try{
         const fetchCuisine = async() => {
-        const responseData = await sendRequest(`http://localhost:5000/api/cuisines/${cuisineId}`);
+        const responseData = await sendRequest(`/api/cuisines/${cuisineId}`);
         
         setLoadedCuisine(responseData.cuisine);
         setFormData({
