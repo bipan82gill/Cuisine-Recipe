@@ -64,7 +64,7 @@ const Auth = () => {
             
            try{
             const responseData = await sendRequest(
-              '/api/chefs/login',
+              process.env.REACT_APP_BACKEND_URL+'/chefs/login',
               'POST',
                JSON.stringify({
                 email: formState.inputs.email.value,
@@ -86,7 +86,7 @@ const Auth = () => {
                   formData.append('password', formState.inputs.password.value);
                   formData.append('image', formState.inputs.image.value);
             const responseData = await sendRequest(
-              '/api/chefs/signup',
+              process.env.REACT_APP_BACKEND_URL+'/chefs/signup',
               'POST',
               formData            
             )

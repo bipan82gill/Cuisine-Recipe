@@ -32,7 +32,7 @@ const CuisineItem = props =>{
     setShowConfirmModal(false);  
     try{
         await sendRequest(`
-        /api/cuisines/${props.id}`,
+        ${process.env.REACT_APP_BACKEND_URL}/cuisines/${props.id}`,
         'DELETE',
         null,
         { Authorization: 'Bearer ' + auth.token }
@@ -74,7 +74,7 @@ const CuisineItem = props =>{
             <Card className="cuisine-item__content">
                 {isLoading && <LoadingSpinner asOverlay/>}
                 <div className ="cuisine-item__image">
-                    <img src={`/${props.image}`} alt={props.title} />
+                    <img src={`${process.env.REACT_APP_ASSET_URL}/${props.image}`} alt={props.title} />
                 </div>
                 <div className ="cuisine-item__info">
                     <h2>{props.title}</h2>
