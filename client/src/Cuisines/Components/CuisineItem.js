@@ -15,10 +15,15 @@ const CuisineItem = props =>{
     const { isLoading, error, sendRequest, clearError } = useHttpClient();
     const [showRecipe, setShowRecipe]= useState(false);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
+    const [showIngredients, setShowIngredients] = useState(false);
 
    const openRecipeHandler = () => setShowRecipe(true);
 
    const closeRecipeHandler = () => setShowRecipe(false);
+
+   const openIngredHandler = () => setShowIngredients(true);
+
+   const closeIngredHandler = () => setShowIngredients(false);
 
    const showDeleteWarningHandler = () =>{
         setShowConfirmModal(true);
@@ -32,7 +37,7 @@ const CuisineItem = props =>{
     setShowConfirmModal(false);  
     try{
         await sendRequest(`
-        ${process.env.REACT_APP_BACKEND_URL}/cuisines/${props.id}`,
+        /api/cuisines/${props.id}`,
         'DELETE',
         null,
         { Authorization: 'Bearer ' + auth.token }
@@ -57,6 +62,22 @@ const CuisineItem = props =>{
                     
                 </div>
         </Modal>
+
+        <Modal 
+            show = {showIngredients} 
+            onCancel ={ closeIngredHandler} 
+            header ={props.title} 
+            contentClass="cuisine-item__modal-content"
+            footerClass ="cuisine-item__modal-actions"
+            footer={<Button onClick={ closeIngredHandler}>CLOSE</Button>}>
+                <div className ="recipe-container">
+                <p>{props.ingredients}</p>
+                    
+                </div>
+        </Modal>
+
+
+
         <Modal 
         show ={showConfirmModal}
         onCancel ={cancelDeleteHandler}
@@ -74,11 +95,12 @@ const CuisineItem = props =>{
             <Card className="cuisine-item__content">
                 {isLoading && <LoadingSpinner asOverlay/>}
                 <div className ="cuisine-item__image">
-                    <img src={`${process.env.REACT_APP_ASSET_URL}/${props.image}`} alt={props.title} />
+                    <img src={`/${props.image}`} alt={props.title} />
                 </div>
                 <div className ="cuisine-item__info">
                     <h2>{props.title}</h2>
-                    <p>{props.ingredients}</p>
+                    <Button inverse onClick={openIngredHandler}>INGREDIENTS</Button>
+                   
                 </div>
                 <div className="cuisine-item__actions">
                     <Button inverse onClick={openRecipeHandler}>WATCH VIDEO</Button>

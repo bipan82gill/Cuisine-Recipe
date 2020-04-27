@@ -17,7 +17,7 @@ const ChefCuisines =() =>{
     useEffect(()=>{
         const fetchCuisines= async() => {
           try{
-                const responseData = await sendRequest(`${process.env.REACT_APP_BACKEND_URL}/cuisines/chef/${chefId}`);
+                const responseData = await sendRequest(`/api/cuisines/chef/${chefId}`);
                 setLoadedCuisines(responseData.cuisines);
         }catch(err){}
     }
