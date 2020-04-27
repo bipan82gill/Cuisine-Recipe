@@ -6,7 +6,7 @@ import Button from '../../Shared/Components/UIElement/FormComponents/Button';
 import Card from '../../Shared/Components/UIElement/Card';
 import ErrorModal from '../../Shared/Components/UIElement/ErrorModal';
 import LoadingSpinner from '../../Shared/Components/UIElement/LoadingSpinner';
-import { VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH } from '../../Shared/Util/validators';
+import { VALIDATOR_REQUIRE } from '../../Shared/Util/validators';
 import { useForm } from '../../Shared/Hooks/form-hook';
 import { useHttpClient } from '../../Shared/Hooks/http-hook';
 import { AuthContext } from '../../Shared/Context/Auth-context';
