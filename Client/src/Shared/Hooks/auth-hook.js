@@ -32,13 +32,13 @@ export const useAuth = () => {
     },[ ]);
   
     useEffect(() => {
-      if(token, tokenExpirationDate) {
-        const remainingTime = tokenExpirationDate.getTime() - new Date().getTime();
-      logoutTimer = setTimeout(logout, remainingTime);
+      if(token,  tokenExpirationDate) {
+        const remainingTime = tokenExpirationDate.getTime() - new Date().getTime()
+      logoutTimer = setTimeout(logout, remainingTime)
       }else {
-        clearTimeout(logoutTimer);
+        clearTimeout(logoutTimer)
       }
-    },[token, logout, tokenExpirationDate]);
+    },[token, logout, tokenExpirationDate])
 
     useEffect(() => {
         const storedData = JSON.parse(localStorage.getItem('chefData'));
