@@ -31,17 +31,18 @@ Back-End Technology
 ![database Records](./demoImages/databaseRecords.jpg)
  
 # Demo
-![Login&Signup](./demoImages/login&signup.jpg)
+
+![Login&Signup](./demoImages/login&Signup.jpg)
 ![authentication](./demoImages/authentication.jpg)
 ![add Recipe](./demoImages/addRecipe.jpg)
 ![watch video](./demoImages/watchVideo.jpg)
 ![responsive](./demoImages/responsive.jpg)
 
 # Live Demo
+
 ![Cuisine Recipe](./demoImages/cuisineRecipe.gif)
 
 
-
-
 # Deployment  Links
+
 https://exotic-cuisine.herokuapp.com/
