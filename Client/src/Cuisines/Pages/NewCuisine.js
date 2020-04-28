@@ -91,7 +91,11 @@ const NewCuisine = () => {
                 errorText="Please enter ingredients for cuisine"
                 onInput={inputHandler}
             />
-             <ImageUpload center id ="image" onInput={inputHandler}errorText="Please provide an image"/>
+             <ImageUpload center 
+             id ="image" 
+             onInput={inputHandler} 
+             validators={[VALIDATOR_REQUIRE()]}
+             errorText="Please provide an image"/>
            
             <Button type="submit" disabled ={!formState.isValid}> ADD RECIPE</Button>       
         </form>
